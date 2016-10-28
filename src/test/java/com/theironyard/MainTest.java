@@ -75,7 +75,7 @@ public class MainTest {
         TestifierAnnotationReader reader = new TestifierAnnotationReader(this);
         String source = new SourceCodeExtractor(reader.getSourcePath()).getMethodDescription(reader.getMethod(), reader.getArgs());
 
-        assertThat("The main() method should concatenate the ligthSwitch object's 'on' property to a string when printing it out.",
+        assertThat("The main() method should concatenate the lightSwitch object's 'on' property to a string when printing it out.",
                 source, RegexMatcher.matches("^.*?StringLiteralExpr\\[The light switch is on: \\] plus FieldAccessExpr\\[on\\] NameExpr\\[lightSwitch\\].*?$"));
 
 
