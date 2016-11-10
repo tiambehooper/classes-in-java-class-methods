@@ -1,34 +1,19 @@
 package com.theironyard;
 
 import com.github.javaparser.ParseException;
-import net.doughughes.testifier.annotation.Testifier;
 import net.doughughes.testifier.matcher.RegexMatcher;
 import net.doughughes.testifier.output.OutputStreamInterceptor;
-import net.doughughes.testifier.util.SourceCodeExtractor;
-import net.doughughes.testifier.util.TestifierAnnotationReader;
-import net.doughughes.testifier.watcher.NotifyingWatcher;
-import net.doughughes.testifier.watcher.OutputWatcher;
-import org.junit.Rule;
+import net.doughughes.testifier.test.TestifierTest;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
-@Testifier(sourcePath = "./src/main/java/com/theironyard/Main.java", clazz = Main.class)
-public class MainTest {
-
-    @Rule
-    public NotifyingWatcher notifyingWatcher = new NotifyingWatcher("https://tiy-testifier-webapp.herokuapp.com/notify");
-
-    @Rule
-    public OutputWatcher outputWatcher = new OutputWatcher();
+public class MainTest extends TestifierTest {
 
     @Test
-    @Testifier(method = "main", args = {String[].class})
     public void mainMethodShouldPrintSwitchStateIsOffThenOnTest() {
         /* arrange */
 
@@ -46,37 +31,29 @@ public class MainTest {
     }
 
     @Test
-    @Testifier(method = "main", args = {String[].class})
     public void mainMethodShouldToggleLightSwitchStateTest() throws NoSuchMethodException, IOException, ParseException {
         /* arrange */
 
         /* act */
-        Main.main(new String[]{});
+        String source = codeWatcher.getMainSourceCodeService().getDescriptionOfMethod("main", String[].class);
+
 
         /* assert */
-        TestifierAnnotationReader reader = new TestifierAnnotationReader(this);
-        String source = new SourceCodeExtractor(reader.getSourcePath()).getMethodDescription(reader.getMethod(), reader.getArgs());
-
         assertThat("The main() method should call a method named toggle() on a variable named lightSwitch.",
-                source, RegexMatcher.matches("^.*?MethodCallExpr\\[toggle\\] NameExpr\\[lightSwitch\\] \\/MethodCallExpr.*?$"));
-
+                source, RegexMatcher.matches("^.*?MethodCallExpr NameExpr\\[lightSwitch\\] MethodName\\[toggle\\] MethodArguments \\/MethodArguments \\/MethodCallExpr.*?$"));
 
     }
 
     @Test
-    @Testifier(method = "main", args = {String[].class})
     public void mainMethodShouldReadFromLightSwitchOnPropertyTest() throws NoSuchMethodException, IOException, ParseException {
         /* arrange */
 
         /* act */
-        Main.main(new String[]{});
+        String source = codeWatcher.getMainSourceCodeService().getDescriptionOfMethod("main", String[].class);
 
         /* assert */
-        TestifierAnnotationReader reader = new TestifierAnnotationReader(this);
-        String source = new SourceCodeExtractor(reader.getSourcePath()).getMethodDescription(reader.getMethod(), reader.getArgs());
-
         assertThat("The main() method should concatenate the lightSwitch object's 'on' property to a string when printing it out.",
-                source, RegexMatcher.matches("^.*?StringLiteralExpr\\[The light switch is on: \\] plus FieldAccessExpr\\[on\\] NameExpr\\[lightSwitch\\].*?$"));
+                source, RegexMatcher.matches("^.*?StringLiteralExpr\\[The light switch is on: \\] plus NameExpr\\[lightSwitch\\] FieldAccessExpr\\[on\\].*?$"));
 
 
     }

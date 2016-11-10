@@ -1,53 +1,58 @@
 package com.theironyard;
 
-import net.doughughes.testifier.annotation.Testifier;
-import net.doughughes.testifier.watcher.NotifyingWatcher;
-import net.doughughes.testifier.watcher.OutputWatcher;
-import org.junit.Rule;
+import net.doughughes.testifier.exception.CannotAccessFieldException;
+import net.doughughes.testifier.exception.CannotAccessMethodException;
+import net.doughughes.testifier.exception.CannotFindFieldException;
+import net.doughughes.testifier.exception.CannotFindMethodException;
+import net.doughughes.testifier.test.TestifierTest;
+import net.doughughes.testifier.util.Invoker;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.fail;
 
-@Testifier(sourcePath = "./src/main/java/com/theironyard/LightSwitch.java", clazz = LightSwitch.class)
-public class LightSwitchTest {
-
-    @Rule
-    public NotifyingWatcher notifyingWatcher = new NotifyingWatcher("https://tiy-testifier-webapp.herokuapp.com/notify");
-
-    @Rule
-    public OutputWatcher outputWatcher = new OutputWatcher();
+public class LightSwitchTest extends TestifierTest {
 
     @Test
-    @Testifier
     public void lightSwitchDefaultsToOffTest() {
         /* arrange */
         LightSwitch lightSwitch = new LightSwitch();
 
-        /* act */
+        try {
+            /* act */
+            boolean result = (boolean) Invoker.readProperty(lightSwitch, "on");
 
-        /* assert */
-        assertThat("The light switch's on property should default to not being on.",
-                lightSwitch.on, equalTo(false));
+            /* assert */
+            assertThat("The light switch's on property should default to not being on.",
+                    result, equalTo(false));
+        } catch (CannotFindFieldException | CannotAccessFieldException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Test
-    @Testifier
     public void toggleInvertsOnPropertyTest() {
         /* arrange */
         LightSwitch lightSwitch = new LightSwitch();
 
-        /* act */
-        lightSwitch.toggle();
-        boolean toggle1 = lightSwitch.on;
-        lightSwitch.toggle();
-        boolean toggle2 = lightSwitch.on;
 
-        /* assert */
-        assertThat("The light switch's toggle() method should toggle the light switch's on property",
-                toggle1, equalTo(true));
-        assertThat("The light switch's toggle() method should toggle the light switch's on property",
-                toggle2, equalTo(false));
+        try {
+            /* act */
+            Invoker.invoke(lightSwitch, "toggle");
+            boolean toggle1 = (boolean) Invoker.readProperty(lightSwitch, "on");
+            Invoker.invoke(lightSwitch, "toggle");
+            boolean toggle2 = (boolean) Invoker.readProperty(lightSwitch, "on");
+
+            /* assert */
+            assertThat("The light switch's toggle() method should toggle the light switch's on property",
+                    toggle1, equalTo(true));
+            assertThat("The light switch's toggle() method should toggle the light switch's on property",
+                    toggle2, equalTo(false));
+        } catch (CannotFindMethodException | CannotAccessMethodException | CannotFindFieldException | CannotAccessFieldException e) {
+            fail(e.getMessage());
+        }
+
     }
 
 
