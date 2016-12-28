@@ -1,6 +1,7 @@
 package com.theironyard;
 
 import com.github.javaparser.ParseException;
+import net.doughughes.testifier.exception.CannotFindMethodException;
 import net.doughughes.testifier.matcher.RegexMatcher;
 import net.doughughes.testifier.output.OutputStreamInterceptor;
 import net.doughughes.testifier.test.TestifierTest;
@@ -10,6 +11,7 @@ import java.io.IOException;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class MainTest extends TestifierTest {
 
@@ -35,7 +37,12 @@ public class MainTest extends TestifierTest {
         /* arrange */
 
         /* act */
-        String source = codeWatcher.getMainSourceCodeService().getDescriptionOfMethod("main", String[].class);
+        String source = null;
+        try {
+            source = codeWatcher.getMainSourceCodeService().getDescriptionOfMethod("main", String[].class);
+        } catch (CannotFindMethodException e) {
+            fail(e.getMessage());
+        }
 
 
         /* assert */
@@ -49,7 +56,12 @@ public class MainTest extends TestifierTest {
         /* arrange */
 
         /* act */
-        String source = codeWatcher.getMainSourceCodeService().getDescriptionOfMethod("main", String[].class);
+        String source = null;
+        try {
+            source = codeWatcher.getMainSourceCodeService().getDescriptionOfMethod("main", String[].class);
+        } catch (CannotFindMethodException e) {
+            fail(e.getMessage());
+        }
 
         /* assert */
         assertThat("The main() method should concatenate the lightSwitch object's 'on' property to a string when printing it out.",
