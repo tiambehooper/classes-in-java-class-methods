@@ -1,5 +1,3 @@
-package com.theironyard;
-
 /**
  * In this exercise you will add a method to the provided LightSwitch class and
  * then use that class in the main method, as instructed below.

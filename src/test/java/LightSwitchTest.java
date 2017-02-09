@@ -1,9 +1,4 @@
-package com.theironyard;
-
-import net.doughughes.testifier.exception.CannotAccessFieldException;
-import net.doughughes.testifier.exception.CannotAccessMethodException;
-import net.doughughes.testifier.exception.CannotFindFieldException;
-import net.doughughes.testifier.exception.CannotFindMethodException;
+import net.doughughes.testifier.exception.*;
 import net.doughughes.testifier.test.TestifierTest;
 import net.doughughes.testifier.util.Invoker;
 import org.junit.Test;
@@ -49,7 +44,7 @@ public class LightSwitchTest extends TestifierTest {
                     toggle1, equalTo(true));
             assertThat("The light switch's toggle() method should toggle the light switch's on property",
                     toggle2, equalTo(false));
-        } catch (CannotFindMethodException | CannotAccessMethodException | CannotFindFieldException | CannotAccessFieldException e) {
+        } catch (CannotInvokeMethodException | CannotFindMethodException | CannotAccessMethodException | CannotFindFieldException | CannotAccessFieldException e) {
             fail(e.getMessage());
         }
 

@@ -1,5 +1,3 @@
-package com.theironyard;
-
 /**
  * The LightSwitch class represents a light switch. Light switches can be either
  * on or off. This is a property of a light switch. They can also be toggled on
