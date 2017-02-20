@@ -23,11 +23,11 @@ public class MainTest extends TestifierTest {
         /* assert */
         OutputStreamInterceptor out = (OutputStreamInterceptor) System.out;
         assertThat("The main() method should print the state of the light switch two times.",
-                out.getPrinted().size(), equalTo(2));
+                out.getPrinted().size(), equalTo(4));
         assertThat("The main() method should print that the light switch is off first.",
                 out.getPrinted().get(0), equalTo("The light switch is on: false"));
         assertThat("The main() method should print that the light switch is on second.",
-                out.getPrinted().get(1), equalTo("The light switch is on: true"));
+                out.getPrinted().get(2), equalTo("The light switch is on: true"));
     }
 
     @Test
